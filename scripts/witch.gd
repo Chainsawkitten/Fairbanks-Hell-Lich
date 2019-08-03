@@ -18,6 +18,14 @@ const deadzone = 0.25
 # Whether the character can currently be controlled. false in cutscenes / dialog.
 var controllable = true
 
+# Size of the screen
+var screen_size = Vector2(480, 270)
+# Number of pixels in from the edges of the screen that you can't move beyond.
+var room_margin = Vector2(10, 14)
+# Coordinates of top-left and bottom-right corners
+var room_top_left = room_margin
+var room_bot_right = screen_size - room_margin
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass
@@ -63,3 +71,13 @@ func move(delta):
 	
 	# Apply the motion, and go from 0-1 to 0-max_speed.
 	transform.origin += speed * delta * max_speed
+	
+	if transform.origin.x < room_top_left.x:
+		transform.origin.x = room_top_left.x
+	if transform.origin.y < room_top_left.y:
+		transform.origin.y = room_top_left.y
+	if transform.origin.x > room_bot_right.x:
+		transform.origin.x = room_bot_right.x
+	if transform.origin.y > room_bot_right.y:
+		transform.origin.y = room_bot_right.y
+	
