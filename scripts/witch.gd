@@ -86,12 +86,6 @@ func move(delta):
 	speed.x = clamp(speed.x, -penalty_top_left.x, penalty_bot_right.x)
 	speed.y = clamp(speed.y, -penalty_top_left.y, penalty_bot_right.y)
 
-	if OS.is_debug_build() && Input.is_action_pressed("ui_select"):
-		print("dist_top_left = ", dist_top_left)
-		print("dist_bot_right = ", dist_bot_right)
-		print("penalty_top_left = ", penalty_top_left)
-		print("penalty_bot_right = ", penalty_bot_right)
-
 	# Apply the motion, and go from 0-1 to 0-max_speed.
 	transform.origin += speed * delta * max_speed
 	
