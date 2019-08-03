@@ -19,14 +19,14 @@ const deadzone = 0.25
 var controllable = true
 
 # Size of the screen
-var screen_size = Vector2(480, 270)
+const screen_size = Vector2(480, 270)
 # Number of pixels in from the edges of the screen that you can't move beyond.
-var room_margin = Vector2(10, 14)
+const room_margin = Vector2(10, 14)
 # Coordinates of top-left and bottom-right corners
-var room_top_left = room_margin
-var room_bot_right = screen_size - room_margin
+const room_top_left = room_margin
+const room_bot_right = screen_size - room_margin
 # Number of pixels inside the room that slows down motion towards the edges.
-var room_padding = Vector2(20, 20)
+const room_padding = Vector2(20, 20)
 
 
 var animation_node = null
@@ -92,9 +92,17 @@ func move(delta):
 	speed.x = clamp(speed.x, -penalty_top_left.x, penalty_bot_right.x)
 	speed.y = clamp(speed.y, -penalty_top_left.y, penalty_bot_right.y)
 
-	# Apply the motion, and go from 0-1 to 0-max_speed.
-	transform.origin += speed * delta * max_speed
-	
+func _physics_process(delta):
+	if controllable:
+		# Apply the motion, and go from 0-1 to 0-max_speed.
+		# transform.origin += speed * delta * max_speed
+		var collision = move_and_collide(speed * delta * max_speed)
+		if collision:
+			transform.origin = Vector2(233, 192)
+			print("You die")
+			# Try this instead if you want bouncy boss:
+			# speed = speed.bounce(collision.normal)
+		
 	# Prevent going out of bounds
-	transform.origin.x = clamp(transform.origin.x, room_top_left.x, room_bot_right.x)
-	transform.origin.y = clamp(transform.origin.y, room_top_left.y, room_bot_right.y)
+	#transform.origin.x = clamp(transform.origin.x, room_top_left.x, room_bot_right.x)
+	#transform.origin.y = clamp(transform.origin.y, room_top_left.y, room_bot_right.y)

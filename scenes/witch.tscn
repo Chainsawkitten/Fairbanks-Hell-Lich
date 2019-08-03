@@ -4,6 +4,7 @@
 [ext_resource path="res://graphics/witch/witch.png" type="Texture" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 6.36895, 10.1156 )
 
 [sub_resource type="Animation" id=2]
 resource_name = "Idle"
