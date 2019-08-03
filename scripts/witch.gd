@@ -12,6 +12,9 @@ const max_rotation = PI * 0.1
 # Seconds it takes to go from 0 to max_speed
 const time_to_max_speed = 0.1
 
+# Joystick deadzone.
+const deadzone = 0.25
+
 # Whether the character can currently be controlled. false in cutscenes / dialog.
 var controllable = true
 
@@ -31,9 +34,16 @@ func _process(delta):
 #  delta - elasped time since the previous frame
 func move(delta):
 	# Poll what the desired speed is, then accelerate/decelerate to that speed.
-	# TODO: Handle joystick.
 	var desired_speed = Vector2(0.0, 0.0)
 	
+	# Joystick.
+	var joy_input = Vector2(Input.get_joy_axis(0, 0), Input.get_joy_axis(0, 1))
+	if abs(joy_input.x) > deadzone:
+		desired_speed.x = joy_input.x
+	if abs(joy_input.y) > deadzone:
+		desired_speed.y = joy_input.y
+	
+	# Keyboard / D-pad
 	if Input.is_action_pressed("ui_left"):
 		desired_speed.x -= 1.0
 	if Input.is_action_pressed("ui_right"):
