@@ -25,6 +25,8 @@ var room_margin = Vector2(10, 14)
 # Coordinates of top-left and bottom-right corners
 var room_top_left = room_margin
 var room_bot_right = screen_size - room_margin
+# Number of pixels inside the room that slows down motion towards the edges.
+var room_padding = Vector2(20, 20)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -69,15 +71,30 @@ func move(delta):
 	speed += difference.clamped(delta / time_to_max_speed)
 	speed = speed.clamped(1.0)
 	
+	# Calculate distance to room edges
+	var dist_top_left = transform.origin - room_top_left
+	var dist_bot_right = room_bot_right - transform.origin
+	# Calculate room edge speed penalty
+	var penalty_top_left = dist_top_left/room_padding
+	var penalty_bot_right = dist_bot_right/room_padding
+	# Clamp speed penalty between 0 and 1 component-wise
+	penalty_top_left.x = clamp(penalty_top_left.x, 0, 1)
+	penalty_top_left.y = clamp(penalty_top_left.y, 0, 1)
+	penalty_bot_right.x = clamp(penalty_bot_right.x, 0, 1)
+	penalty_bot_right.y = clamp(penalty_bot_right.y, 0, 1)
+	# Clamp speed by penalty
+	speed.x = clamp(speed.x, -penalty_top_left.x, penalty_bot_right.x)
+	speed.y = clamp(speed.y, -penalty_top_left.y, penalty_bot_right.y)
+
+	if OS.is_debug_build() && Input.is_action_pressed("ui_select"):
+		print("dist_top_left = ", dist_top_left)
+		print("dist_bot_right = ", dist_bot_right)
+		print("penalty_top_left = ", penalty_top_left)
+		print("penalty_bot_right = ", penalty_bot_right)
+
 	# Apply the motion, and go from 0-1 to 0-max_speed.
 	transform.origin += speed * delta * max_speed
 	
-	if transform.origin.x < room_top_left.x:
-		transform.origin.x = room_top_left.x
-	if transform.origin.y < room_top_left.y:
-		transform.origin.y = room_top_left.y
-	if transform.origin.x > room_bot_right.x:
-		transform.origin.x = room_bot_right.x
-	if transform.origin.y > room_bot_right.y:
-		transform.origin.y = room_bot_right.y
-	
+	# Prevent going out of bounds
+	transform.origin.x = clamp(transform.origin.x, room_top_left.x, room_bot_right.x)
+	transform.origin.y = clamp(transform.origin.y, room_top_left.y, room_bot_right.y)
