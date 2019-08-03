@@ -35,7 +35,7 @@ var animation_node = null
 var dead = false
 
 # Number of seconds to play before resetting after death.
-const reset_time = 2.0
+const reset_time = 1.0
 
 # How far it's been since we died.
 var death_timer = 0.0
@@ -145,6 +145,10 @@ func die():
 	death_hat_node.velocity += speed * max_speed * 0.5
 	
 	speed = Vector2(0, 0)
+	Input.start_joy_vibration(0, 0.0, 1.0, 0.5)
+	Engine.time_scale = 0.25
 
 func reset():
+	Engine.time_scale = 1.0
+	Input.stop_joy_vibration(0)
 	get_tree().reload_current_scene()
