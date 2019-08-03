@@ -13,4 +13,3 @@ position = Vector2( 230, 57 )
 position = Vector2( 233, 192 )
 
 [node name="orb" parent="." instance=ExtResource( 3 )]
-position = Vector2( 230, 57 )
