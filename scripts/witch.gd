@@ -1,13 +1,16 @@
 extends Node2D
 
-# The current speed of the witch.
+# The current speed of the witch (0-1).
 var speed = Vector2(0.0, 0.0)
 
 # The max speed in pixels / second.
-const max_speed = 120.0
+const max_speed = 180.0
 
 # The max rotation to use when tilting the witch based on her horizontal speed.
 const max_rotation = PI * 0.1
+
+# Seconds it takes to go from 0 to max_speed
+const time_to_max_speed = 0.1
 
 # Whether the character can currently be controlled. false in cutscenes / dialog.
 var controllable = true
@@ -22,7 +25,7 @@ func _process(delta):
 		move(delta)
 		
 		# Tilt the witch depending on the horizontal speed.
-		rotation = speed.x / max_speed * max_rotation
+		rotation = speed.x * max_rotation
 
 # Handle the movement of the witch.
 #  delta - elasped time since the previous frame
@@ -41,15 +44,12 @@ func move(delta):
 		desired_speed.y += 1.0
 	
 	# Clamp the desired speed to 0-1. This way we move the same speed even if moving diagonally.
-	var desired_speed_length = desired_speed.length()
-	if (desired_speed_length > 1.0):
-		desired_speed /= desired_speed_length
+	desired_speed = desired_speed.clamped(1.0)
 	
-	# Now go from 0-1 to 0-max_speed.
-	desired_speed *= max_speed
+	# Accelerate toward the desired speed.
+	var difference = desired_speed - speed
+	speed += difference.clamped(delta / time_to_max_speed)
+	speed = speed.clamped(1.0)
 	
-	# Set the speed to the desired speed.
-	# TODO: Acceleration
-	speed = desired_speed
-	
-	transform.origin += speed * delta
+	# Apply the motion, and go from 0-1 to 0-max_speed.
+	transform.origin += speed * delta * max_speed
