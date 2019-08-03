@@ -6,6 +6,9 @@ var speed = Vector2(0.0, 0.0)
 # The max speed in pixels / second.
 const max_speed = 120.0
 
+# The max rotation to use when tilting the witch based on her horizontal speed.
+const max_rotation = PI * 0.1
+
 # Whether the character can currently be controlled. false in cutscenes / dialog.
 var controllable = true
 
@@ -17,6 +20,9 @@ func _ready():
 func _process(delta):
 	if controllable:
 		move(delta)
+		
+		# Tilt the witch depending on the horizontal speed.
+		rotation = speed.x / max_speed * max_rotation
 
 # Handle the movement of the witch.
 #  delta - elasped time since the previous frame
