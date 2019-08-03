@@ -1,4 +1,4 @@
-extends Node2D
+extends KinematicBody2D
 
 # The current speed of the witch (0-1).
 var speed = Vector2(0.0, 0.0)
@@ -28,9 +28,13 @@ var room_bot_right = screen_size - room_margin
 # Number of pixels inside the room that slows down motion towards the edges.
 var room_padding = Vector2(20, 20)
 
+
+var animation_node = null
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	animation_node = get_node("AnimationPlayer")
+	animation_node.play("Idle")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -39,6 +43,8 @@ func _process(delta):
 		
 		# Tilt the witch depending on the horizontal speed.
 		rotation = speed.x * max_rotation
+	
+	animation_node.playback_speed = 2.0 + speed.length()
 
 # Handle the movement of the witch.
 #  delta - elasped time since the previous frame
