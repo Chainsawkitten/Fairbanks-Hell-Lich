@@ -28,13 +28,35 @@ const room_bot_right = screen_size - room_margin
 # Number of pixels inside the room that slows down motion towards the edges.
 const room_padding = Vector2(20, 20)
 
-
+# Node used to control the animation.
 var animation_node = null
+
+# Whether the witch is dead.
+var dead = false
+
+# Number of seconds to play before resetting after death.
+const reset_time = 2.0
+
+# How far it's been since we died.
+var death_timer = 0.0
+
+var sprite_node = null
+
+# Death nodes.
+var death_broom_node = null
+var death_body_node = null
+var death_hat_node = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	animation_node = get_node("AnimationPlayer")
 	animation_node.play("Idle")
+	
+	sprite_node = get_node("sprite")
+	
+	death_broom_node = get_node("DeathBroom")
+	death_body_node = get_node("DeathBody")
+	death_hat_node = get_node("DeathHat")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -45,6 +67,12 @@ func _process(delta):
 		rotation = speed.x * max_rotation
 	
 	animation_node.playback_speed = 2.0 + speed.length()
+	
+	# When dead, wait until playing the death animation, then reset.
+	if dead:
+		death_timer += delta
+		if death_timer > reset_time:
+			reset()
 
 # Handle the movement of the witch.
 #  delta - elasped time since the previous frame
@@ -98,11 +126,25 @@ func _physics_process(delta):
 		# transform.origin += speed * delta * max_speed
 		var collision = move_and_collide(speed * delta * max_speed)
 		if collision:
-			transform.origin = Vector2(233, 192)
-			print("You die")
-			# Try this instead if you want bouncy boss:
-			# speed = speed.bounce(collision.normal)
-		
-	# Prevent going out of bounds
-	#transform.origin.x = clamp(transform.origin.x, room_top_left.x, room_bot_right.x)
-	#transform.origin.y = clamp(transform.origin.y, room_top_left.y, room_bot_right.y)
+			die()
+
+# Handle death. Play a short animation of dying. Then reset the level.
+func die():
+	dead = true
+	controllable = false
+	sprite_node.visible = false
+	
+	# Instruct the death sprites to activate.
+	death_broom_node.die()
+	death_body_node.die()
+	death_hat_node.die()
+	
+	# Transfer our speed to the death sprites.
+	death_broom_node.velocity += speed * max_speed * 0.5
+	death_body_node.velocity += speed * max_speed * 0.5
+	death_hat_node.velocity += speed * max_speed * 0.5
+	
+	speed = Vector2(0, 0)
+
+func reset():
+	get_tree().reload_current_scene()
