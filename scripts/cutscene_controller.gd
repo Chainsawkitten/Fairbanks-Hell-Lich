@@ -15,6 +15,12 @@ func _ready():
 func _process(delta):
 	# Play the intro on the first frame.
 	play_cutscene(CUTSCENE.INTRO, "intro_messages_done")
+	
+	if Global.has_stopped_orb:
+		play_cutscene(CUTSCENE.HIT_THE_ORB, "do_nothing")
+	
+	if Global.has_hit_boss:
+		play_cutscene(CUTSCENE.FIRST_HIT, "do_nothing")
 
 # Play a cutscene, but only if it hasn't been played before.
 func play_cutscene(cutscene, otherwise):
@@ -44,7 +50,7 @@ func play_cutscene_regardless(cutscene):
 func intro():
 	Global.paused = true
 	message_box.add_message(message_box.CAT_FACEPAW, "You've really done it this time.")
-	message_box.add_message(message_box.CAT_NEUTRAL, "I have to admit.\nI didn't think you'd unleash a massive lich.")
+	message_box.add_message(message_box.CAT_SWEAT, "I have to admit.\nI didn't think you'd unleash a massive lich.")
 	message_box.add_message(message_box.CAT_NEUTRAL, "Well... what are you waiting for?")
 	message_box.add_message(message_box.CAT_SHOW_TEETH, "Let's kick some lich butt!")
 	message_box.show_messages(self, "intro_messages_done")
@@ -65,6 +71,19 @@ func foresight_messages_done():
 # Tutorial explaining how to hit the orb.
 func hit_the_orb():
 	Global.paused = true
+	message_box.add_message(message_box.CAT_NEUTRAL, "Hey. I'm not toast!\nWell dodged.")
+	message_box.add_message(message_box.CAT_FACEPAW, "I wish you would have used your foresight\nbefore you broke into professor...")
+	message_box.add_message(message_box.CAT_FACEPAW, "... Fairbank's office and unleashed a hell lich.")
+	message_box.show_messages(self, "hit_the_orb_messages_done")
+
+func hit_the_orb_messages_done():
+	message_box.add_message(message_box.CAT_NEUTRAL, "Did you see that?")
+	message_box.add_message(message_box.CAT_NEUTRAL, "The orb just changed color!")
+	message_box.add_message(message_box.CAT_SHOW_TEETH, "I think it's time to use this lich's orb\nagainst it!")
+	message_box.show_messages(self, "hit_the_orb_messages2_done")
+
+func hit_the_orb_messages2_done():
+	Global.paused = false
 
 # Tutorial explaining that you did damage.
 func first_hit():
@@ -73,3 +92,7 @@ func first_hit():
 # The ending cutscene.
 func ending():
 	Global.paused = true
+
+# ¯\_(ツ)_/¯
+func do_nothing():
+	pass

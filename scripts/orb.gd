@@ -83,79 +83,82 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	clear_old_lines()
-	update_sprite()
 	
-	# Before being fired. Leave some time to show the foresight.
-	if state == FORESIGHT:
-		foresight_line_node.visible = true
-		foresight_timer += delta / foresight_time
-		
-		if foresight_timer <= 0.5:
-			foresight_line_node.default_color.a = foresight_timer * 2.0
-		else:
-			foresight_line_node.default_color.a = (1.0 - foresight_timer) * 2.0
-		
-		if foresight_timer > 1.0:
-			state = FIRED
-			foresight_timer = 0
-			foresight_line_node.visible = false
-	
-	if state == FIRED and positions.size() > 0:
-		travel(delta)
-	else:
+	if state == STOPPED:
 		# Append empty frame so trail will fade out even after orb has stopped.
 		var frame = TrailNode.new()
 		frame.num_points = 0
 		frame.time = delta
 		trails.append(frame)
-
-	if state == STOPPED:
-		# Update stopped timer
-		stopped_timer += delta / stopped_time
-		# Check timeout
-		if stopped_timer > 1.0:
-			stopped_timer = 0.0
-			state = RETURN
-		# Update blinking
-		var blink_phase = int((stopped_timer+0.3)*(stopped_timer+0.3)*16) % 2
-		if blink_phase != stopped_blink_phase:
-			stopped_blink_phase = blink_phase
-			if blink_phase:
-				orb_sprite.texture = orb_blue
+	
+	if !Global.paused:
+		update_sprite()
+		
+		# Before being fired. Leave some time to show the foresight.
+		if state == FORESIGHT:
+			foresight_line_node.visible = true
+			foresight_timer += delta / foresight_time
+			
+			if foresight_timer <= 0.5:
+				foresight_line_node.default_color.a = foresight_timer * 2.0
 			else:
-				orb_sprite.texture = orb_purple
-		# Check for collision with player
-		var c = orb_node.move_and_collide(Vector2.ZERO, true, true, true)
-		if c:
-			# Launch towards boss
-			state = LAUNCHED
-			stopped_timer = 0.0
-
-	if state == LAUNCHED:
-		# Launch the orb towards the boss
-		var distance_to_travel = launch_speed * delta
-		var boss_pos = boss_node.transform.origin
-		var to_node = boss_pos - orb_node.transform.origin
-		var distance_to_node = to_node.length()
-		to_node = to_node.clamped(min(distance_to_travel, distance_to_node))
-		orb_node.transform.origin += to_node
-		if distance_to_travel >= distance_to_node:
-			# It's a Hit!
-			state = RETURN
-			boss_node.hit()
-
-	if state == RETURN:
-		# Move the orb back the middle
-		var distance_to_travel = return_speed * delta
-		var node_pos = return_position_node.transform.origin
-		var to_node = node_pos - orb_node.transform.origin
-		var distance_to_node = to_node.length()
-		to_node = to_node.clamped(min(distance_to_travel, distance_to_node))
-		orb_node.transform.origin += to_node
-		if distance_to_travel >= distance_to_node:
-			# It's back
-			state = NEUTRAL
-			boss_node.orb_ready()
+				foresight_line_node.default_color.a = (1.0 - foresight_timer) * 2.0
+			
+			if foresight_timer > 1.0:
+				state = FIRED
+				foresight_timer = 0
+				foresight_line_node.visible = false
+		
+		if state == FIRED and positions.size() > 0:
+			travel(delta)
+	
+		if state == STOPPED:
+			# Update stopped timer
+			stopped_timer += delta / stopped_time
+			# Check timeout
+			if stopped_timer > 1.0:
+				stopped_timer = 0.0
+				state = RETURN
+			# Update blinking
+			var blink_phase = int((stopped_timer+0.3)*(stopped_timer+0.3)*16) % 2
+			if blink_phase != stopped_blink_phase:
+				stopped_blink_phase = blink_phase
+				if blink_phase:
+					orb_sprite.texture = orb_blue
+				else:
+					orb_sprite.texture = orb_purple
+			# Check for collision with player
+			var c = orb_node.move_and_collide(Vector2.ZERO, true, true, true)
+			if c:
+				# Launch towards boss
+				state = LAUNCHED
+				stopped_timer = 0.0
+	
+		if state == LAUNCHED:
+			# Launch the orb towards the boss
+			var distance_to_travel = launch_speed * delta
+			var boss_pos = boss_node.transform.origin
+			var to_node = boss_pos - orb_node.transform.origin
+			var distance_to_node = to_node.length()
+			to_node = to_node.clamped(min(distance_to_travel, distance_to_node))
+			orb_node.transform.origin += to_node
+			if distance_to_travel >= distance_to_node:
+				# It's a Hit!
+				state = RETURN
+				boss_node.hit()
+	
+		if state == RETURN:
+			# Move the orb back the middle
+			var distance_to_travel = return_speed * delta
+			var node_pos = return_position_node.transform.origin
+			var to_node = node_pos - orb_node.transform.origin
+			var distance_to_node = to_node.length()
+			to_node = to_node.clamped(min(distance_to_travel, distance_to_node))
+			orb_node.transform.origin += to_node
+			if distance_to_travel >= distance_to_node:
+				# It's back
+				state = NEUTRAL
+				boss_node.orb_ready()
 
 
 
@@ -197,6 +200,7 @@ func travel(delta):
 			# Have we reached the final node?
 			if current_position >= positions.size():
 				state = STOPPED
+				Global.has_stopped_orb = true
 				break
 		else:
 			# Add a line point at the current position
