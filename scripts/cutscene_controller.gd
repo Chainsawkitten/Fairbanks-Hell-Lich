@@ -63,6 +63,7 @@ func intro():
 	message_box.show_messages(self, "intro_messages_done")
 
 func intro_messages_done():
+	get_node("../BossMusic").play()
 	play_cutscene(CUTSCENE.FORESIGHT, "foresight_messages_done")
 
 # Tutorial explaining foresight.
