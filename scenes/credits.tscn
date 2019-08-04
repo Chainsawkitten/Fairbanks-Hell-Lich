@@ -1,0 +1,171 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://music/darkest-child-by-kevin-macleod.ogg" type="AudioStream" id=1]
+[ext_resource path="res://scripts/scroll.gd" type="Script" id=2]
+[ext_resource path="res://graphics/dialog/m5x7.tres" type="DynamicFont" id=3]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 1 )
+volume_db = -3.0
+autoplay = true
+
+[node name="ScrollNode" type="Node2D" parent="."]
+position = Vector2( 0, 270 )
+script = ExtResource( 2 )
+
+[node name="CreditsLabel" type="Label" parent="ScrollNode"]
+margin_right = 480.0
+margin_bottom = 205.0
+custom_fonts/font = ExtResource( 3 )
+text = "GAME BY
+Albin Bernhardsson
+Daniel Eliasson
+
+
+MUSIC
+Music from https://filmmusic.io
+\"Darkest Child\" by Kevin MacLeod (https://incompetech.com)
+License: CC BY (http://creativecommons.org/licenses/by/4.0/)
+
+Music from https://filmmusic.io
+\"Killers\" by Kevin MacLeod (https://incompetech.com)
+License: CC BY (http://creativecommons.org/licenses/by/4.0/)
+
+
+
+
+
+
+
+THE END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Just close the game...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Seriously?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+There are no more messages.
+Ok?
+
+
+
+
+
+Well, after that one.
+
+
+This one, I mean."
+align = 1

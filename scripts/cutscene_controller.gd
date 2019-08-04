@@ -131,6 +131,7 @@ func orb_break_done(e):
 
 func final_messages_done():
 	get_node("../WindLoop").stop()
+	get_tree().change_scene("res://scenes/credits.tscn")
 
 # ¯\_(ツ)_/¯
 func do_nothing():
