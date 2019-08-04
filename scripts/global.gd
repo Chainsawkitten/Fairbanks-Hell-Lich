@@ -12,3 +12,4 @@ var has_stopped_orb = false
 var has_hit_boss = false
 
 var has_killed_boss = false
+var has_jawed_boss = false

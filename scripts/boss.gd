@@ -7,7 +7,7 @@ var orb_node = null
 var patterns_node = null
 
 # The current orb pattern.
-var current_pattern = 6
+var current_pattern = 0
 
 # The different kinds of states.
 enum { NORMAL, CASTING, DAMAGED, JAW_DROP, DYING }
@@ -63,6 +63,7 @@ func _process(delta):
 				set_state(NORMAL)
 		elif state == JAW_DROP:
 			if timer > jaw_drop_time:
+				Global.has_jawed_boss = true
 				set_state(DYING)
 	
 	if state == DYING:

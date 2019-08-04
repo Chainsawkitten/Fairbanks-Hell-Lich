@@ -9,7 +9,7 @@
 [ext_resource path="res://music/WindStereo.ogg" type="AudioStream" id=7]
 [ext_resource path="res://scenes/message_box.tscn" type="PackedScene" id=8]
 [ext_resource path="res://scripts/cutscene_controller.gd" type="Script" id=9]
-[ext_resource path="res://sound_effects/glass-smash.wav" type="AudioStream" id=10]
+[ext_resource path="res://sound_effects/glass-smash.ogg" type="AudioStream" id=10]
 
 [node name="Node2D" type="Node2D"]
 
@@ -35,7 +35,7 @@ position = Vector2( 236.655, 142.01 )
 
 [node name="BossMusic" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 6 )
-volume_db = -3.0
+volume_db = -5.0
 
 [node name="WindLoop" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 7 )

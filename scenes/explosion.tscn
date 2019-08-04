@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scripts/explosion.gd" type="Script" id=1]
 [ext_resource path="res://graphics/boss/explosion.png" type="Texture" id=2]
+[ext_resource path="res://sound_effects/explosion.ogg" type="AudioStream" id=3]
 
 [sub_resource type="Animation" id=1]
 resource_name = "explode"
@@ -29,3 +30,7 @@ hframes = 9
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 playback_speed = 3.0
 anims/explode = SubResource( 1 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+volume_db = 15.0
