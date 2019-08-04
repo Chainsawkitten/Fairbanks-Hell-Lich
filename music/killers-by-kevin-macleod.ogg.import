@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/killers-by-kevin-macleod.ogg-33ffb68a32c175a96104eee763952687.oggstr"
+
+[deps]
+
+source_file="res://music/killers-by-kevin-macleod.ogg"
+dest_files=[ "res://.import/killers-by-kevin-macleod.ogg-33ffb68a32c175a96104eee763952687.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0
