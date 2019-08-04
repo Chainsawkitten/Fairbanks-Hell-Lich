@@ -88,6 +88,12 @@ func hit_the_orb_messages2_done():
 # Tutorial explaining that you did damage.
 func first_hit():
 	Global.paused = true
+	message_box.add_message(message_box.CAT_NEUTRAL, "I think that did something.")
+	message_box.add_message(message_box.CAT_SWEAT, "Maybe we're not dead after all...")
+	message_box.show_messages(self, "first_hit_messages_done")
+
+func first_hit_messages_done():
+	Global.paused = false
 
 # The ending cutscene.
 func ending():

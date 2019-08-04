@@ -84,6 +84,7 @@ func hit():
 	set_state(DAMAGED)
 	current_pattern+=1
 	set_orb_pattern(current_pattern)
+	Global.has_hit_boss = true
 
 # Called by orb when it returns to neutral state
 func orb_ready():
