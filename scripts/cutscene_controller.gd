@@ -37,6 +37,7 @@ func play_cutscene_regardless(cutscene):
 
 # The intro cutscene.
 func intro():
+	Global.paused = true
 	message_box.add_message(message_box.CAT_FACEPAW, "You've really done it this time.")
 	message_box.add_message(message_box.CAT_NEUTRAL, "I have to admit.\nI didn't think you'd unleash a massive lich.")
 	message_box.add_message(message_box.CAT_NEUTRAL, "Well... what are you waiting for?")
@@ -53,16 +54,17 @@ func foresight():
 	message_box.show_messages(self, "foresight_messages_done")
 
 func foresight_messages_done():
-	pass
+	Global.paused = false
+	get_node("../boss").fire()
 
 # Tutorial explaining how to hit the orb.
 func hit_the_orb():
-	pass
+	Global.paused = true
 
 # Tutorial explaining that you did damage.
 func first_hit():
-	pass
+	Global.paused = true
 
 # The ending cutscene.
 func ending():
-	pass
+	Global.paused = true

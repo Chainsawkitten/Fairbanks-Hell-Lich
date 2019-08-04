@@ -45,26 +45,26 @@ func _ready():
 	casting_hands = get_node("body/HandsCasting")
 	
 	# Test setting the orb pattern
-	fire()
 	set_orb_pattern(current_pattern)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	timer += delta
-	
-	# State machine.
-	if state == DAMAGED:
-		if timer > damaged_time:
-			set_state(NORMAL)
-	elif state == CASTING:
-		if orb_node.state != orb_node.FORESIGHT:
-			set_state(NORMAL)
-	elif state == JAW_DROP:
-		if timer > jaw_drop_time:
-			set_state(DYING)
-	elif state == DYING:
-		transform.origin.y += delta * dying_speed
-		explode(delta)
+	if !Global.paused:
+		timer += delta
+		
+		# State machine.
+		if state == DAMAGED:
+			if timer > damaged_time:
+				set_state(NORMAL)
+		elif state == CASTING:
+			if orb_node.state != orb_node.FORESIGHT:
+				set_state(NORMAL)
+		elif state == JAW_DROP:
+			if timer > jaw_drop_time:
+				set_state(DYING)
+		elif state == DYING:
+			transform.origin.y += delta * dying_speed
+			explode(delta)
 
 # Set the pattern the orb travels in.
 #  number - which of the patterns to set it to

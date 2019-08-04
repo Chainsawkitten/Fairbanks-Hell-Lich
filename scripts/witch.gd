@@ -60,7 +60,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if controllable:
+	if controllable and !Global.paused:
 		move(delta)
 		
 		# Tilt the witch depending on the horizontal speed.
