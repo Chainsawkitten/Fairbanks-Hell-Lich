@@ -14,26 +14,31 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	# Play the intro on the first frame.
-	play_cutscene(CUTSCENE.INTRO)
+	play_cutscene(CUTSCENE.INTRO, "intro_messages_done")
 
 # Play a cutscene, but only if it hasn't been played before.
-func play_cutscene(cutscene):
-	if !has_played[cutscene]:
+func play_cutscene(cutscene, otherwise):
+	if !Global.has_played_cutscene.has(cutscene):
 		play_cutscene_regardless(cutscene)
+	elif !has_played[cutscene]:
+		has_played[cutscene] = true
+		call(otherwise)
 
 # Play a cutscene, regardless of whether it has been played before.
 func play_cutscene_regardless(cutscene):
-	if cutscene == CUTSCENE.INTRO:
-		intro()
-	elif cutscene == CUTSCENE.FORESIGHT:
-		foresight()
-	elif cutscene == CUTSCENE.HIT_THE_ORB:
-		hit_the_orb()
-	elif cutscene == CUTSCENE.FIRST_HIT:
-		first_hit()
-	elif cutscene == CUTSCENE.ENDING:
-		ending()
-	has_played[cutscene] = true
+	if !has_played[cutscene]:
+		if cutscene == CUTSCENE.INTRO:
+			intro()
+		elif cutscene == CUTSCENE.FORESIGHT:
+			foresight()
+		elif cutscene == CUTSCENE.HIT_THE_ORB:
+			hit_the_orb()
+		elif cutscene == CUTSCENE.FIRST_HIT:
+			first_hit()
+		elif cutscene == CUTSCENE.ENDING:
+			ending()
+		has_played[cutscene] = true
+		Global.has_played_cutscene[cutscene] = true
 
 # The intro cutscene.
 func intro():
@@ -45,7 +50,7 @@ func intro():
 	message_box.show_messages(self, "intro_messages_done")
 
 func intro_messages_done():
-	foresight()
+	play_cutscene(CUTSCENE.FORESIGHT, "foresight_messages_done")
 
 # Tutorial explaining foresight.
 func foresight():
