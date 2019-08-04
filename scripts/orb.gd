@@ -38,26 +38,12 @@ func _ready():
 	orb_node = get_node("Orb")
 	trail_line_node = get_node("TrailLine")
 
-	# Hardcode some values for testing purposes.
-	# We are going to need some editor to make these.
-	positions.append(Vector2(0.0, 0.0))
-	positions.append(Vector2(200.0, 0.0))
-	positions.append(Vector2(100.0, 100.0))
-	positions.append(Vector2(50.0, 25.0))
-	positions.append(Vector2(75.0, 200.0))
-	positions.append(Vector2(30.0, 40.0))
-
-	# Test firing the bullet.
-	fire()
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	clear_old_lines()
 
-	if state == FIRED:
+	if state == FIRED and positions.size() > 0:
 		travel(delta)
-	else:
-		fire()
 
 # Travel along the determined path.
 #  delta - time since last frame in seconds
@@ -134,3 +120,11 @@ func clear_old_lines():
 func fire():
 	state = FIRED
 	current_position = 0
+
+# Set the orb pattern to travel.
+#   pattern - line describing the pattern
+func set_pattern(pattern : Line2D):
+	positions.clear()
+	
+	for i in range(pattern.get_point_count()):
+		positions.append(pattern.get_point_position(i))
