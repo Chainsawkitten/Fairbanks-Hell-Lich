@@ -123,9 +123,11 @@ func ending_messages_done():
 	orb_break_player.play("Break", -1, 0.5)
 	
 	get_node("../orb").visible = false
+	
+	get_node("../BossMusic").stop()
+	get_node("BreakSoundEffect").play()
 
 func orb_break_done(e):
-	get_node("../BossMusic").stop()
 	message_box.add_message(message_box.CAT_FACEPAW, "We're done for.")
 	message_box.show_messages(self, "final_messages_done")
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://scripts/message_box.gd" type="Script" id=1]
 [ext_resource path="res://graphics/dialog/cat_neutral.png" type="Texture" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://graphics/dialog/messagebox.png" type="Texture" id=6]
 [ext_resource path="res://graphics/dialog/m5x7.tres" type="DynamicFont" id=7]
 [ext_resource path="res://graphics/dialog/paw.png" type="Texture" id=8]
+[ext_resource path="res://sound_effects/meow.wav" type="AudioStream" id=9]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Enter"
@@ -72,3 +73,7 @@ centered = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MessageBox"]
 anims/Enter = SubResource( 1 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 9 )
+volume_db = -10.0

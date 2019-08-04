@@ -94,6 +94,8 @@ func show_current_message():
 	timer = 0
 	character = 0
 	state = SCROLL_MESSAGE
+	get_node("AudioStreamPlayer").pitch_scale = 0.7 + randf() * 0.6
+	get_node("AudioStreamPlayer").play()
 
 # Set the talker icon.
 func set_icon(icon):
