@@ -37,6 +37,9 @@ var explosion = preload("res://scenes/explosion.tscn")
 var time_to_next_explosion = 0
 const time_between_explosions = 0.05
 
+const stopped_time_start = 4.0
+const stopped_time_end = 1.5
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	orb_node = get_node("../orb")
@@ -84,6 +87,7 @@ func set_orb_pattern(number : int):
 
 # Fire the orb!
 func fire():
+	orb_node.stopped_time = stopped_time_start + (stopped_time_end - stopped_time_start) * (float(current_pattern) / patterns_node.get_child_count())
 	orb_node.fire()
 	set_state(CASTING)
 
