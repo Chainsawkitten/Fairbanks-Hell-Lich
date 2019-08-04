@@ -10,3 +10,5 @@ var has_stopped_orb = false
 
 # Whether the player has ever hit the boss.
 var has_hit_boss = false
+
+var has_killed_boss = false

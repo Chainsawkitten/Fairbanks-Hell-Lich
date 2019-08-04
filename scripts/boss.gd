@@ -7,7 +7,7 @@ var orb_node = null
 var patterns_node = null
 
 # The current orb pattern.
-var current_pattern = 0
+var current_pattern = 3
 
 # The different kinds of states.
 enum { NORMAL, CASTING, DAMAGED, JAW_DROP, DYING }
@@ -28,6 +28,8 @@ const jaw_drop_time = 3.0
 
 # How fast the boss should fall while dying. In pixels / second
 const dying_speed = 20.0
+
+const dying_time = 5.0
 
 # Explosion scene to be spawned when dying.
 var explosion = preload("res://scenes/explosion.tscn")
@@ -62,9 +64,14 @@ func _process(delta):
 		elif state == JAW_DROP:
 			if timer > jaw_drop_time:
 				set_state(DYING)
-		elif state == DYING:
-			transform.origin.y += delta * dying_speed
-			explode(delta)
+	
+	if state == DYING:
+		if Global.paused:
+			timer += delta
+		transform.origin.y += delta * dying_speed
+		explode(delta)
+		if timer > dying_time:
+			Global.has_killed_boss = true
 
 # Set the pattern the orb travels in.
 #  number - which of the patterns to set it to

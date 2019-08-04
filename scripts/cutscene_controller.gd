@@ -9,6 +9,9 @@ onready var message_box = get_node("../MessageBox")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Global.has_hit_boss = false
+	Global.has_killed_boss = false
+	Global.has_stopped_orb = false
 	has_played.resize(CUTSCENE.size())
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -16,11 +19,14 @@ func _process(delta):
 	# Play the intro on the first frame.
 	play_cutscene(CUTSCENE.INTRO, "intro_messages_done")
 	
-	if Global.has_stopped_orb:
+	if Global.has_stopped_orb and !get_node("../witch").dead:
 		play_cutscene(CUTSCENE.HIT_THE_ORB, "do_nothing")
 	
 	if Global.has_hit_boss:
 		play_cutscene(CUTSCENE.FIRST_HIT, "do_nothing")
+	
+	if Global.has_killed_boss:
+		play_cutscene_regardless(CUTSCENE.ENDING)
 
 # Play a cutscene, but only if it hasn't been played before.
 func play_cutscene(cutscene, otherwise):
@@ -49,6 +55,7 @@ func play_cutscene_regardless(cutscene):
 # The intro cutscene.
 func intro():
 	Global.paused = true
+	message_box.add_message(message_box.CAT_NEUTRAL, "Gwyn...")
 	message_box.add_message(message_box.CAT_FACEPAW, "You've really done it this time.")
 	message_box.add_message(message_box.CAT_SWEAT, "I have to admit.\nI didn't think you'd unleash a massive lich.")
 	message_box.add_message(message_box.CAT_NEUTRAL, "Well... what are you waiting for?")
@@ -98,6 +105,25 @@ func first_hit_messages_done():
 # The ending cutscene.
 func ending():
 	Global.paused = true
+	message_box.add_message(message_box.CAT_SWEAT, "Is that it?")
+	message_box.add_message(message_box.CAT_SWEAT, "I really hope there was only one of them...")
+	message_box.add_message(message_box.CAT_NEUTRAL, "Well, the castle may be torn to pieces\n but at least the orb is safe.")
+	message_box.add_message(message_box.CAT_NEUTRAL, "That's gotta count for something, right?")
+	message_box.add_message(message_box.CAT_SWEAT, "Miss Fairbank can't kill us now!")
+	message_box.show_messages(self, "ending_messages_done")
+
+func ending_messages_done():
+	# Play orb break animation.
+	pass
+
+func orb_break_done():
+	message_box.add_message(message_box.CAT_FACEPAW, "We're done for.")
+	message_box.show_messages(self, "final_messages_done")
+	pass
+
+func final_messages_done():
+	# Change to credits scene
+	pass
 
 # ¯\_(ツ)_/¯
 func do_nothing():
