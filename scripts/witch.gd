@@ -121,7 +121,7 @@ func move(delta):
 	speed.y = clamp(speed.y, -penalty_top_left.y, penalty_bot_right.y)
 
 func _physics_process(delta):
-	if controllable:
+	if controllable and !Global.paused:
 		# Apply the motion, and go from 0-1 to 0-max_speed.
 		# transform.origin += speed * delta * max_speed
 		var collision = move_and_collide(speed * delta * max_speed)
