@@ -42,9 +42,7 @@ var time_per_character = 0.025
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	add_message(CAT_FACEPAW, "Don't tell me...\nThis is supposed to be riveting dialogue?")
-	add_message(CAT_SHOW_TEETH, "This makes me so mad!")
-	show_messages(self, "test_callback")
+	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -88,7 +86,7 @@ func add_message(icon, message):
 func show_current_message():
 	var mes = messages[current_message]
 	set_icon(mes.icon)
-	label_node.set_text(mes.message)
+	label_node.set_text("")
 	timer = 0
 	character = 0
 	state = SCROLL_MESSAGE
@@ -127,6 +125,7 @@ func animation_finished(e):
 		show_current_message()
 	elif state == LEAVE :
 		visible = false
+		messages.clear()
 		callback_object.call(callback_method)
 
 func test_callback():
