@@ -57,6 +57,9 @@ var stopped_blink_phase = 0
 # Speed when lauched towards boss
 var launch_speed = 1000.0
 
+# The boss node
+var boss_node = null
+
 # Textures for different states
 export(Texture) var orb_red
 export(Texture) var orb_purple
@@ -122,15 +125,18 @@ func _process(delta):
 			stopped_timer = 0.0
 
 	if state == LAUNCHED:
+		if !boss_node:
+			boss_node = get_node("../boss")
 		# Launch the orb towards the boss
 		var distance_to_travel = launch_speed * delta
-		var boss_pos = get_node("../boss").transform.origin
+		var boss_pos = boss_node.transform.origin
 		var to_node = boss_pos - orb_node.transform.origin
 		var distance_to_node = to_node.length()
 		to_node = to_node.clamped(min(distance_to_travel, distance_to_node))
 		orb_node.transform.origin += to_node
 		if distance_to_travel >= distance_to_node:
 			# It's a Hit!
+			boss_node.hit()
 			state = RETURN
 
 
