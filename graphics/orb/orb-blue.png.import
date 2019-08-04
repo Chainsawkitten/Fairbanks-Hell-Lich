@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/orb.png-301cb0983b4ed90eeab75e2149e1d951.stex"
+path="res://.import/orb-blue.png-e1a8539ff6fa50df20e4e2e492cd480b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://graphics/orb.png"
-dest_files=[ "res://.import/orb.png-301cb0983b4ed90eeab75e2149e1d951.stex" ]
+source_file="res://graphics/orb/orb-blue.png"
+dest_files=[ "res://.import/orb-blue.png-e1a8539ff6fa50df20e4e2e492cd480b.stex" ]
 
 [params]
 

@@ -1,7 +1,10 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scripts/orb.gd" type="Script" id=1]
-[ext_resource path="res://graphics/orb.png" type="Texture" id=2]
+[ext_resource path="res://graphics/orb/orb-red.png" type="Texture" id=2]
+
+
+
 
 [sub_resource type="Gradient" id=1]
 offsets = PoolRealArray( 6.21533e-022, 0.754967, 1 )
