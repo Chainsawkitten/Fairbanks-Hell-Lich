@@ -7,7 +7,7 @@ var positions = []
 var current_position = 0
 
 # The state the bullet is currently in.
-enum {NEUTRAL, FIRED, STOPPED, RETURN}
+enum {NEUTRAL, FORESIGHT, FIRED, STOPPED, RETURN}
 var state = NEUTRAL
 
 # The speed of the bullet in pixels / second.
@@ -15,6 +15,9 @@ const speed = 2400.0
 
 # The orb.
 var orb_node = null
+
+# The line node the shows the foresight.
+var foresight_line_node = null
 
 # The line node that shows the orb's trail.
 var trail_line_node = null
@@ -33,15 +36,38 @@ class TrailNode:
 # How long a trail should stay on the screen (in seconds).
 const trail_time = 0.1
 
+# How long we've been in foresight.
+var foresight_timer = 0.0
+
+# How long foresight lasts.
+# Should decrease as the fight gets more difficult
+var foresight_time = 2.0
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	orb_node = get_node("Orb")
 	trail_line_node = get_node("TrailLine")
+	foresight_line_node = get_node("ForesightLine")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	clear_old_lines()
-
+	
+	# Before being fired. Leave some time to show the foresight.
+	if state == FORESIGHT:
+		foresight_line_node.visible = true
+		foresight_timer += delta / foresight_time
+		
+		if foresight_timer <= 0.5:
+			foresight_line_node.default_color.a = foresight_timer * 2.0
+		else:
+			foresight_line_node.default_color.a = (1.0 - foresight_timer) * 2.0
+		
+		if foresight_timer > 1.0:
+			state = FIRED
+			foresight_timer = 0
+			foresight_line_node.visible = false
+	
 	if state == FIRED and positions.size() > 0:
 		travel(delta)
 	else:
@@ -124,13 +150,23 @@ func clear_old_lines():
 
 # Fire the bullet!
 func fire():
-	state = FIRED
+	state = FORESIGHT
 	current_position = 0
 
 # Set the orb pattern to travel.
 #   pattern - line describing the pattern
 func set_pattern(pattern : Line2D):
+	# Get this in case this is called before _ready
+	foresight_line_node = get_node("ForesightLine")
+	
+	# Set positions to travel to.
 	positions.clear()
 	
 	for i in range(pattern.get_point_count()):
 		positions.append(pattern.get_point_position(i))
+	
+	# Foresight.
+	foresight_line_node.clear_points()
+	
+	for position in positions:
+		foresight_line_node.add_point(position)
