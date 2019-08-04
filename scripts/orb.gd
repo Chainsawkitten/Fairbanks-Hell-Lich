@@ -7,7 +7,7 @@ var positions = []
 var current_position = 0
 
 # The state the bullet is currently in.
-enum {NEUTRAL, FORESIGHT, FIRED, STOPPED, RETURN}
+enum {NEUTRAL, FORESIGHT, FIRED, STOPPED, LAUNCHED, RETURN}
 var state = NEUTRAL
 var prev_state = NEUTRAL
 
@@ -53,6 +53,9 @@ var stopped_timer = 0.0
 var stopped_time = 4.0
 # Phase for blinking when stopped
 var stopped_blink_phase = 0
+
+# Speed when lauched towards boss
+var launch_speed = 1000.0
 
 # Textures for different states
 export(Texture) var orb_red
@@ -111,6 +114,26 @@ func _process(delta):
 				orb_sprite.texture = orb_blue
 			else:
 				orb_sprite.texture = orb_purple
+		# Check for collision with player
+		var c = orb_node.move_and_collide(Vector2.ZERO, true, true, true)
+		if c:
+			# Launch towards boss
+			state = LAUNCHED
+			stopped_timer = 0.0
+
+	if state == LAUNCHED:
+		# Launch the orb towards the boss
+		var distance_to_travel = launch_speed * delta
+		var boss_pos = get_node("../boss").transform.origin
+		var to_node = boss_pos - orb_node.transform.origin
+		var distance_to_node = to_node.length()
+		to_node = to_node.clamped(min(distance_to_travel, distance_to_node))
+		orb_node.transform.origin += to_node
+		if distance_to_travel >= distance_to_node:
+			# It's a Hit!
+			state = RETURN
+
+
 
 
 # Travel along the determined path.
@@ -196,6 +219,8 @@ func update_sprite():
 			FIRED:
 				orb_sprite.texture = orb_red
 			STOPPED:
+				orb_sprite.texture = orb_purple
+			LAUNCHED:
 				orb_sprite.texture = orb_purple
 			RETURN:
 				orb_sprite.texture = orb_blue

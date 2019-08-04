@@ -22,6 +22,7 @@ orb_blue = ExtResource( 4 )
 width = 5.0
 default_color = Color( 1, 0.521569, 0.521569, 1 )
 gradient = SubResource( 1 )
+texture_mode = 223230352
 
 [node name="ForesightLine" type="Line2D" parent="."]
 visible = false
