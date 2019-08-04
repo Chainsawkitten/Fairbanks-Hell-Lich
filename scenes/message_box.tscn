@@ -54,7 +54,7 @@ centered = false
 [node name="Label" type="Label" parent="MessageBox/BoxSprite"]
 margin_left = 44.0
 margin_top = 12.0
-margin_right = 330.0
+margin_right = 309.0
 margin_bottom = 45.0
 custom_fonts/font = ExtResource( 7 )
 custom_colors/font_color = Color( 0.92549, 0.921569, 0.901961, 1 )
@@ -62,6 +62,7 @@ text = "Here's some text. What happens when it wraps? It happens like this!"
 autowrap = true
 
 [node name="PawSprite" type="Sprite" parent="MessageBox/BoxSprite/Label"]
+position = Vector2( 272.611, 15.6056 )
 texture = ExtResource( 8 )
 
 [node name="CatSprite" type="Sprite" parent="MessageBox"]

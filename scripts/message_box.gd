@@ -30,6 +30,12 @@ var callback_method = ""
 enum { ENTER, SHOW_MESSAGES, LEAVE }
 var state = ENTER
 
+# Timer used to flash paw.
+var timer = 0
+
+# How long paw should be visible.
+var paw_time = 0.3
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	add_message(CAT_FACEPAW, "Don't tell me...\nThis is supposed to be riveting dialogue?")
@@ -39,6 +45,13 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if state == SHOW_MESSAGES:
+		# Flash paw.
+		timer += delta
+		if timer > paw_time:
+			paw_node.visible = !paw_node.visible
+			timer -= paw_time
+		
+		# Handle user input.
 		if Input.is_action_just_pressed("ui_accept"):
 			# Show next message.
 			current_message += 1
@@ -60,6 +73,7 @@ func show_current_message():
 	var mes = messages[current_message]
 	set_icon(mes.icon)
 	label_node.set_text(mes.message)
+	timer = 0
 
 # Set the talker icon.
 func set_icon(icon):
