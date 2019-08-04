@@ -12,7 +12,7 @@ var state = NEUTRAL
 var prev_state = NEUTRAL
 
 # The speed of the bullet in pixels / second.
-const speed = 2400.0
+const speed = 4800.0 # 2400.0 # 
 
 # The orb.
 var orb_node = null
