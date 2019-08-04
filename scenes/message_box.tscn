@@ -1,0 +1,42 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://scripts/message_box.gd" type="Script" id=1]
+[ext_resource path="res://graphics/dialog/cat_neutral.png" type="Texture" id=2]
+[ext_resource path="res://graphics/dialog/cat_facepaw.png" type="Texture" id=3]
+[ext_resource path="res://graphics/dialog/cat_show_teeth.png" type="Texture" id=4]
+[ext_resource path="res://graphics/dialog/cat_sweat.png" type="Texture" id=5]
+[ext_resource path="res://graphics/dialog/messagebox.png" type="Texture" id=6]
+[ext_resource path="res://graphics/dialog/m5x7.tres" type="DynamicFont" id=7]
+[ext_resource path="res://graphics/dialog/paw.png" type="Texture" id=8]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource( 1 )
+cat_neutral_texture = ExtResource( 2 )
+cat_facepaw_texture = ExtResource( 3 )
+cat_show_teeth_texture = ExtResource( 4 )
+cat_sweat_texture = ExtResource( 5 )
+
+[node name="MessageBox" type="Node2D" parent="."]
+position = Vector2( 0, 200 )
+
+[node name="BoxSprite" type="Sprite" parent="MessageBox"]
+position = Vector2( 85, 19 )
+texture = ExtResource( 6 )
+centered = false
+
+[node name="Label" type="Label" parent="MessageBox/BoxSprite"]
+margin_left = 44.0
+margin_top = 12.0
+margin_right = 330.0
+margin_bottom = 45.0
+custom_fonts/font = ExtResource( 7 )
+custom_colors/font_color = Color( 0.92549, 0.921569, 0.901961, 1 )
+text = "Here's some text. What happens when it wraps? It happens like this!"
+autowrap = true
+
+[node name="PawSprite" type="Sprite" parent="MessageBox/BoxSprite/Label"]
+texture = ExtResource( 8 )
+
+[node name="CatSprite" type="Sprite" parent="MessageBox"]
+texture = ExtResource( 2 )
+centered = false
