@@ -29,6 +29,12 @@ const jaw_drop_time = 3.0
 # How fast the boss should fall while dying. In pixels / second
 const dying_speed = 20.0
 
+# Explosion scene to be spawned when dying.
+var explosion = preload("res://scenes/explosion.tscn")
+
+var time_to_next_explosion = 0
+const time_between_explosions = 0.05
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	orb_node = get_node("../orb")
@@ -58,6 +64,7 @@ func _process(delta):
 			set_state(DYING)
 	elif state == DYING:
 		transform.origin.y += delta * dying_speed
+		explode(delta)
 
 # Set the pattern the orb travels in.
 #  number - which of the patterns to set it to
@@ -103,3 +110,20 @@ func set_state(new_state):
 		jaw_node.state = jaw_node.DEAD
 	elif state == DYING:
 		pass
+
+# Spawn explosions.
+func explode(delta):
+	time_to_next_explosion -= delta
+	
+	while time_to_next_explosion < 0:
+		# Spawn an explosion.
+		var explosion_instance = explosion.instance()
+		get_parent().add_child(explosion_instance)
+		var position = transform.origin
+		var min_pos = Vector2(-70, -20)
+		var max_pos = Vector2(70, 200)
+		position += Vector2(randf(), randf()) * (max_pos - min_pos) + min_pos
+		explosion_instance.transform.origin = position
+		
+		
+		time_to_next_explosion += time_between_explosions
