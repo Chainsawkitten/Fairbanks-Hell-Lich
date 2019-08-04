@@ -44,6 +44,12 @@ func _process(delta):
 
 	if state == FIRED and positions.size() > 0:
 		travel(delta)
+	else:
+		# Append empty frame so trail will fade out even after orb has stopped.
+		var frame = TrailNode.new()
+		frame.num_points = 0
+		frame.time = delta
+		trails.append(frame)
 
 # Travel along the determined path.
 #  delta - time since last frame in seconds
