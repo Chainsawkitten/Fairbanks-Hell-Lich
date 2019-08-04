@@ -27,14 +27,18 @@ var callback_object = null
 var callback_method = ""
 
 # State machine.
-enum { ENTER, SHOW_MESSAGES, LEAVE }
+enum { ENTER, SCROLL_MESSAGE, DISPLAY_MESSAGE, LEAVE }
 var state = ENTER
 
-# Timer used to flash paw.
+# Timer used to flash paw and scroll characters.
 var timer = 0
 
 # How long paw should be visible.
 var paw_time = 0.3
+
+# Which character we are currently at.
+var character = 0
+var time_per_character = 0.025
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -44,7 +48,19 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if state == SHOW_MESSAGES:
+	if state == SCROLL_MESSAGE:
+		timer += delta
+		while timer > time_per_character and character < messages[current_message].message.length():
+			timer -= time_per_character
+			character += 1
+		
+		label_node.set_text(messages[current_message].message.substr(0, character))
+		
+		if character == messages[current_message].message.length():
+			state = DISPLAY_MESSAGE
+			timer = 0
+		
+	elif state == DISPLAY_MESSAGE:
 		# Flash paw.
 		timer += delta
 		if timer > paw_time:
@@ -74,6 +90,8 @@ func show_current_message():
 	set_icon(mes.icon)
 	label_node.set_text(mes.message)
 	timer = 0
+	character = 0
+	state = SCROLL_MESSAGE
 
 # Set the talker icon.
 func set_icon(icon):
@@ -106,7 +124,6 @@ func show_messages(call_object, call_method):
 # Handle the finished animation.
 func animation_finished(e):
 	if state == ENTER:
-		state = SHOW_MESSAGES
 		show_current_message()
 	elif state == LEAVE :
 		visible = false
