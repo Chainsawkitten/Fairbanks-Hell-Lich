@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scripts/message_box.gd" type="Script" id=1]
 [ext_resource path="res://graphics/dialog/cat_neutral.png" type="Texture" id=2]
@@ -8,6 +8,33 @@
 [ext_resource path="res://graphics/dialog/messagebox.png" type="Texture" id=6]
 [ext_resource path="res://graphics/dialog/m5x7.tres" type="DynamicFont" id=7]
 [ext_resource path="res://graphics/dialog/paw.png" type="Texture" id=8]
+
+[sub_resource type="Animation" id=1]
+resource_name = "Enter"
+tracks/0/type = "value"
+tracks/0/path = NodePath("CatSprite:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 0.535887, 0.0323521 ),
+"update": 0,
+"values": [ Vector2( -150, 0 ), Vector2( 0, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("BoxSprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.5, 1 ),
+"transitions": PoolRealArray( 1, 0.63728, 1 ),
+"update": 0,
+"values": [ Vector2( 85, 80 ), Vector2( 85, 80 ), Vector2( 85, 19 ) ]
+}
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 1 )
@@ -40,3 +67,6 @@ texture = ExtResource( 8 )
 [node name="CatSprite" type="Sprite" parent="MessageBox"]
 texture = ExtResource( 2 )
 centered = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MessageBox"]
+anims/Enter = SubResource( 1 )
