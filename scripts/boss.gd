@@ -7,7 +7,7 @@ var orb_node = null
 var patterns_node = null
 
 # The current orb pattern.
-var current_pattern = 1
+var current_pattern = 0
 
 # The different kinds of states.
 enum { NORMAL, CASTING, DAMAGED, JAW_DROP, DYING }
@@ -79,10 +79,16 @@ func fire():
 	orb_node.fire()
 	set_state(CASTING)
 
+# Called by orb when it hits the boss
 func hit():
 	set_state(DAMAGED)
 	current_pattern+=1
 	set_orb_pattern(current_pattern)
+
+# Called by orb when it returns to neutral state
+func orb_ready():
+	if state != JAW_DROP && state != DYING:
+		fire()
 
 # Set which state the boss should be in.
 #  new_state - the new state.

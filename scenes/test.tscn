@@ -18,3 +18,6 @@ position = Vector2( 230, 57 )
 position = Vector2( 233, 192 )
 
 [node name="orb" parent="." instance=ExtResource( 4 )]
+
+[node name="orb_return_position" type="Node2D" parent="."]
+position = Vector2( 236.655, 142.01 )

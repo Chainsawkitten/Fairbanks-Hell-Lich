@@ -60,6 +60,11 @@ var launch_speed = 1000.0
 # The boss node
 var boss_node = null
 
+# Speed when returning
+var return_speed = 100.0
+# Position to return to
+var return_position_node = null
+
 # Textures for different states
 export(Texture) var orb_red
 export(Texture) var orb_purple
@@ -72,6 +77,8 @@ func _ready():
 	orb_sprite = orb_node.get_node("Sprite")
 	trail_line_node = get_node("TrailLine")
 	foresight_line_node = get_node("ForesightLine")
+	boss_node = get_node("../boss")
+	return_position_node = get_node("../orb_return_position")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -125,8 +132,6 @@ func _process(delta):
 			stopped_timer = 0.0
 
 	if state == LAUNCHED:
-		if !boss_node:
-			boss_node = get_node("../boss")
 		# Launch the orb towards the boss
 		var distance_to_travel = launch_speed * delta
 		var boss_pos = boss_node.transform.origin
@@ -136,9 +141,21 @@ func _process(delta):
 		orb_node.transform.origin += to_node
 		if distance_to_travel >= distance_to_node:
 			# It's a Hit!
-			boss_node.hit()
 			state = RETURN
+			boss_node.hit()
 
+	if state == RETURN:
+		# Move the orb back the middle
+		var distance_to_travel = return_speed * delta
+		var node_pos = return_position_node.transform.origin
+		var to_node = node_pos - orb_node.transform.origin
+		var distance_to_node = to_node.length()
+		to_node = to_node.clamped(min(distance_to_travel, distance_to_node))
+		orb_node.transform.origin += to_node
+		if distance_to_travel >= distance_to_node:
+			# It's back
+			state = NEUTRAL
+			boss_node.orb_ready()
 
 
 
