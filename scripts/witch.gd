@@ -126,27 +126,29 @@ func _physics_process(delta):
 		# transform.origin += speed * delta * max_speed
 		var collision = move_and_collide(speed * delta * max_speed)
 		if collision:
-			die()
+			if collision.collider.name == "boss":
+				die()
 
 # Handle death. Play a short animation of dying. Then reset the level.
 func die():
-	dead = true
-	controllable = false
-	sprite_node.visible = false
-	
-	# Instruct the death sprites to activate.
-	death_broom_node.die()
-	death_body_node.die()
-	death_hat_node.die()
-	
-	# Transfer our speed to the death sprites.
-	death_broom_node.velocity += speed * max_speed * 0.5
-	death_body_node.velocity += speed * max_speed * 0.5
-	death_hat_node.velocity += speed * max_speed * 0.5
-	
-	speed = Vector2(0, 0)
-	Input.start_joy_vibration(0, 0.0, 1.0, 0.5)
-	Engine.time_scale = 0.25
+	if !dead:
+		dead = true
+		controllable = false
+		sprite_node.visible = false
+		
+		# Instruct the death sprites to activate.
+		death_broom_node.die()
+		death_body_node.die()
+		death_hat_node.die()
+		
+		# Transfer our speed to the death sprites.
+		death_broom_node.velocity += speed * max_speed * 0.5
+		death_body_node.velocity += speed * max_speed * 0.5
+		death_hat_node.velocity += speed * max_speed * 0.5
+		
+		speed = Vector2(0, 0)
+		Input.start_joy_vibration(0, 0.0, 1.0, 0.5)
+		Engine.time_scale = 0.25
 
 func reset():
 	Engine.time_scale = 1.0

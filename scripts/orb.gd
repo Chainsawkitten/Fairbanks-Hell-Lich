@@ -35,7 +35,7 @@ const trail_time = 0.1
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	orb_node = get_node("Sprite")
+	orb_node = get_node("Orb")
 	trail_line_node = get_node("TrailLine")
 
 	# Hardcode some values for testing purposes.
@@ -76,7 +76,12 @@ func travel(delta):
 		var distance_to_node = to_node.length()
 
 		# Move toward it.
-		orb_node.transform.origin += to_node.clamped(min(distance_to_travel, distance_to_node))
+		to_node = to_node.clamped(min(distance_to_travel, distance_to_node))
+		var collision = orb_node.move_and_collide(to_node, true, true, true)
+		if collision:
+			collision.collider.die()
+		
+		orb_node.transform.origin += to_node
 
 		# TODO: Check collision with player.
 

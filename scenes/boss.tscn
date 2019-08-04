@@ -7,7 +7,8 @@
 radius = 14.7591
 height = 63.3902
 
-[node name="Node2D" type="KinematicBody2D"]
+[node name="BossNode" type="KinematicBody2D"]
+collision_layer = 2
 
 [node name="body" type="Sprite" parent="."]
 position = Vector2( 28, 96 )
