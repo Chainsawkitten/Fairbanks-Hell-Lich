@@ -7,7 +7,7 @@ var orb_node = null
 var patterns_node = null
 
 # The current orb pattern.
-var current_pattern = 3
+var current_pattern = 4
 
 # The different kinds of states.
 enum { NORMAL, CASTING, DAMAGED, JAW_DROP, DYING }
