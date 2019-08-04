@@ -7,10 +7,10 @@ var orb_node = null
 var patterns_node = null
 
 # The current orb pattern.
-var current_pattern = 0
+var current_pattern = 2
 
 # The different kinds of states.
-enum { NORMAL, CASTING, DAMAGED }
+enum { NORMAL, CASTING, DAMAGED, JAW_DROP, DYING }
 
 # Current state of the boss
 var state = NORMAL
@@ -24,6 +24,10 @@ var casting_hands = null
 var timer = 0
 
 const damaged_time = 1.0
+const jaw_drop_time = 3.0
+
+# How fast the boss should fall while dying. In pixels / second
+const dying_speed = 20.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -35,8 +39,8 @@ func _ready():
 	casting_hands = get_node("body/HandsCasting")
 	
 	# Test setting the orb pattern
-	set_orb_pattern(current_pattern)
 	fire()
+	set_orb_pattern(current_pattern)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -49,6 +53,11 @@ func _process(delta):
 	elif state == CASTING:
 		if orb_node.state != orb_node.FORESIGHT:
 			set_state(NORMAL)
+	elif state == JAW_DROP:
+		if timer > jaw_drop_time:
+			set_state(DYING)
+	elif state == DYING:
+		transform.origin.y += delta * dying_speed
 
 # Set the pattern the orb travels in.
 #  number - which of the patterns to set it to
@@ -56,7 +65,7 @@ func set_orb_pattern(number : int):
 	if number < patterns_node.get_child_count():
 		orb_node.set_pattern(patterns_node.get_child(number))
 	else:
-		print("All patterns done! I think I die now?")
+		set_state(JAW_DROP)
 
 # Fire the orb!
 func fire():
@@ -82,3 +91,15 @@ func set_state(new_state):
 		normal_hands.visible = false
 		damaged_hands.visible = false
 		casting_hands.visible = true
+	elif state == JAW_DROP:
+		normal_hands.visible = false
+		damaged_hands.visible = true
+		casting_hands.visible = false
+		
+		get_node("CollisionShape2D").disabled = true
+		
+		# Drop jaw.
+		var jaw_node = get_node("Head/jaw")
+		jaw_node.state = jaw_node.DEAD
+	elif state == DYING:
+		pass

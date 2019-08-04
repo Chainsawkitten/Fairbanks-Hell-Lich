@@ -73,9 +73,9 @@ move_speed = 32.0
 [node name="Head" type="Node2D" parent="."]
 
 [node name="jaw" type="Sprite" parent="Head"]
-position = Vector2( 4, 24 )
+position = Vector2( 4, 19 )
 texture = ExtResource( 6 )
-offset = Vector2( 0.5, 0 )
+offset = Vector2( 0.5, 0.5 )
 script = ExtResource( 7 )
 
 [node name="head" type="Sprite" parent="Head"]

@@ -21,4 +21,4 @@ func _ready():
 func _process(delta):
 	timer += delta
 	
-	transform.origin = starting_pos + Vector2(sin(timer * move_speed), sin(timer * move_speed * 0.7 + 1.2))
+	transform.origin = starting_pos + Vector2(floor(sin(timer * move_speed)), floor(sin(timer * move_speed * 0.7 + 1.2)))
