@@ -108,23 +108,29 @@ func ending():
 	Global.paused = true
 	message_box.add_message(message_box.CAT_SWEAT, "Is that it?")
 	message_box.add_message(message_box.CAT_SWEAT, "I really hope there was only one of them...")
-	message_box.add_message(message_box.CAT_NEUTRAL, "Well, the castle may be torn to pieces\n but at least the orb is safe.")
+	message_box.add_message(message_box.CAT_NEUTRAL, "Well, the castle may be torn to pieces\nbut at least the orb is safe.")
 	message_box.add_message(message_box.CAT_NEUTRAL, "That's gotta count for something, right?")
 	message_box.add_message(message_box.CAT_SWEAT, "Miss Fairbank can't kill us now!")
 	message_box.show_messages(self, "ending_messages_done")
 
 func ending_messages_done():
-	# Play orb break animation.
-	pass
+	var orb_break = get_node("../OrbBreak")
+	orb_break.position = get_node("../orb_return_position").position
+	orb_break.visible = true
+	
+	var orb_break_player = orb_break.get_node("AnimationPlayer")
+	orb_break_player.connect("animation_finished", self, "orb_break_done")
+	orb_break_player.play("Break", -1, 0.5)
+	
+	get_node("../orb").visible = false
 
-func orb_break_done():
+func orb_break_done(e):
+	get_node("../BossMusic").stop()
 	message_box.add_message(message_box.CAT_FACEPAW, "We're done for.")
 	message_box.show_messages(self, "final_messages_done")
-	pass
 
 func final_messages_done():
-	# Change to credits scene
-	pass
+	get_node("../WindLoop").stop()
 
 # ¯\_(ツ)_/¯
 func do_nothing():

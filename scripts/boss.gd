@@ -116,7 +116,7 @@ func set_state(new_state):
 		
 		# Explode!
 		var explosion_instance = explosion.instance()
-		get_parent().add_child(explosion_instance)
+		get_node("../Explosions").add_child(explosion_instance)
 		explosion_instance.transform.origin = transform.origin
 	elif state == CASTING:
 		normal_hands.visible = false
@@ -142,7 +142,7 @@ func explode(delta):
 	while time_to_next_explosion < 0:
 		# Spawn an explosion.
 		var explosion_instance = explosion.instance()
-		get_parent().add_child(explosion_instance)
+		get_node("../Explosions").add_child(explosion_instance)
 		var position = transform.origin
 		var min_pos = Vector2(-70, -20)
 		var max_pos = Vector2(70, 200)

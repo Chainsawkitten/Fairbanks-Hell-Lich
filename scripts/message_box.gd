@@ -27,8 +27,8 @@ var callback_object = null
 var callback_method = ""
 
 # State machine.
-enum { ENTER, SCROLL_MESSAGE, DISPLAY_MESSAGE, LEAVE }
-var state = ENTER
+enum { BEGIN, ENTER, SCROLL_MESSAGE, DISPLAY_MESSAGE, LEAVE }
+var state = BEGIN
 
 # Timer used to flash paw and scroll characters.
 var timer = 0
@@ -46,7 +46,11 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if state == SCROLL_MESSAGE:
+	if state == ENTER:
+		if timer > 0.1:
+			visible = true
+		timer += delta
+	elif state == SCROLL_MESSAGE:
 		timer += delta
 		while timer > time_per_character and character < messages[current_message].message.length():
 			timer -= time_per_character
@@ -114,7 +118,6 @@ func show_messages(call_object, call_method):
 	animation_player.connect("animation_finished", self, "animation_finished")
 	animation_player.play("Enter")
 	current_message = 0
-	visible = true
 	label_node.set_text("")
 	paw_node.visible = false
 	state = ENTER
@@ -126,6 +129,7 @@ func animation_finished(e):
 	elif state == LEAVE :
 		visible = false
 		messages.clear()
+		state = BEGIN
 		callback_object.call(callback_method)
 
 func test_callback():

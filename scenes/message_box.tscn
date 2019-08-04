@@ -37,6 +37,7 @@ tracks/1/keys = {
 }
 
 [node name="Node2D" type="Node2D"]
+visible = false
 script = ExtResource( 1 )
 cat_neutral_texture = ExtResource( 2 )
 cat_facepaw_texture = ExtResource( 3 )
