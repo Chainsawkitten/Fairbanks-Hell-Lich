@@ -9,12 +9,16 @@ var current_position = 0
 # The state the bullet is currently in.
 enum {NEUTRAL, FORESIGHT, FIRED, STOPPED, RETURN}
 var state = NEUTRAL
+var prev_state = NEUTRAL
 
 # The speed of the bullet in pixels / second.
 const speed = 2400.0
 
 # The orb.
 var orb_node = null
+
+# The orb sprite node.
+var orb_sprite = null
 
 # The line node the shows the foresight.
 var foresight_line_node = null
@@ -43,15 +47,30 @@ var foresight_timer = 0.0
 # Should decrease as the fight gets more difficult
 var foresight_time = 2.0
 
+# How long has orb been stopped
+var stopped_timer = 0.0
+# How long should the orb be stopped
+var stopped_time = 4.0
+# Phase for blinking when stopped
+var stopped_blink_phase = 0
+
+# Textures for different states
+export(Texture) var orb_red
+export(Texture) var orb_purple
+export(Texture) var orb_blue
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	orb_node = get_node("Orb")
+	orb_sprite = orb_node.get_node("Sprite")
 	trail_line_node = get_node("TrailLine")
 	foresight_line_node = get_node("ForesightLine")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	clear_old_lines()
+	update_sprite()
 	
 	# Before being fired. Leave some time to show the foresight.
 	if state == FORESIGHT:
@@ -76,6 +95,23 @@ func _process(delta):
 		frame.num_points = 0
 		frame.time = delta
 		trails.append(frame)
+
+	if state == STOPPED:
+		# Update stopped timer
+		stopped_timer += delta / stopped_time
+		# Check timeout
+		if stopped_timer > 1.0:
+			stopped_timer = 0.0
+			state = RETURN
+		# Update blinking
+		var blink_phase = int((stopped_timer+0.3)*(stopped_timer+0.3)*16) % 2
+		if blink_phase != stopped_blink_phase:
+			stopped_blink_phase = blink_phase
+			if blink_phase:
+				orb_sprite.texture = orb_blue
+			else:
+				orb_sprite.texture = orb_purple
+
 
 # Travel along the determined path.
 #  delta - time since last frame in seconds
@@ -147,6 +183,24 @@ func clear_old_lines():
 
 			i += 1
 			trails.remove(0)
+
+#Update sprite if changed state
+func update_sprite():
+	if prev_state != state:
+		prev_state = state
+		match state:
+			NEUTRAL:
+				orb_sprite.texture = orb_blue
+			FORESIGHT:
+				orb_sprite.texture = orb_red
+			FIRED:
+				orb_sprite.texture = orb_red
+			STOPPED:
+				orb_sprite.texture = orb_purple
+			RETURN:
+				orb_sprite.texture = orb_blue
+			_:
+				orb_sprite.texture = orb_red
 
 # Fire the bullet!
 func fire():
