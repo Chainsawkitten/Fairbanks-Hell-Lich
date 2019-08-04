@@ -6,7 +6,7 @@
 [ext_resource path="res://graphics/orb/orb-blue.png" type="Texture" id=4]
 
 [sub_resource type="Gradient" id=1]
-offsets = PoolRealArray( 6.21533e-22, 0.754967, 1 )
+offsets = PoolRealArray( 6.21533e-022, 0.754967, 1 )
 colors = PoolColorArray( 0.517647, 0.176471, 0.176471, 0, 0.517647, 0.176471, 0.176471, 1, 1, 0.521569, 0.521569, 1 )
 
 [sub_resource type="CircleShape2D" id=2]
@@ -22,7 +22,6 @@ orb_blue = ExtResource( 4 )
 width = 5.0
 default_color = Color( 1, 0.521569, 0.521569, 1 )
 gradient = SubResource( 1 )
-texture_mode = 223230352
 
 [node name="ForesightLine" type="Line2D" parent="."]
 visible = false

@@ -105,6 +105,11 @@ func set_state(new_state):
 		normal_hands.visible = false
 		damaged_hands.visible = true
 		casting_hands.visible = false
+		
+		# Explode!
+		var explosion_instance = explosion.instance()
+		get_parent().add_child(explosion_instance)
+		explosion_instance.transform.origin = transform.origin
 	elif state == CASTING:
 		normal_hands.visible = false
 		damaged_hands.visible = false
